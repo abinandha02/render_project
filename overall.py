@@ -69,6 +69,7 @@ new.reset_index(inplace=True)
 features_3 = new.columns[2:-1]
 
 app = dash.Dash()
+server=app.server
 
 # CSS borders
 plot_style = {'width': '100%', 'height': '60vh', 'border': '0px solid #d4d4d4', 'padding': '10px'}
