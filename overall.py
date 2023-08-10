@@ -5,15 +5,15 @@ from dash import dcc
 from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 import pandas as pd
-
+import requests
 
 #for yearly analysis
-df = pd.read_csv(r'C:\Users\Abinandha\Downloads\crimes_against_women_2001-2014.csv', index_col=0)
+df = pd.read_csv(r'https://raw.githubusercontent.com/abinandha02/render_project/main/crimes_against_women_2001-2014-checkpoint.csv', index_col=0)
 year_df = df.groupby('Year').sum()
 features_1 = year_df.columns
 
 #data cleaning for statewise
-state_df = pd.read_csv(r'C:\Users\Abinandha\Downloads\crimes_against_women_2001-2014.csv')
+state_df = pd.read_csv(r'https://raw.githubusercontent.com/abinandha02/render_project/main/crimes_against_women_2001-2014-checkpoint.csv')
 state_df.drop(columns="Unnamed: 0", inplace=True)
 state_df["STATE/UT"] = state_df.apply(lambda row: row['STATE/UT'].lower(), axis=1)
 state_df['STATE/UT'].replace(
@@ -22,7 +22,14 @@ state_df['STATE/UT'].replace(
 state_df['STATE/UT'] = state_df['STATE/UT'].str.title()
 
 #for json and its id's
-india_states = json.load(open(r"C:\Users\Abinandha\Downloads\states_india.geojson", "r"))
+
+url = "https://raw.githubusercontent.com/abinandha02/render_project/7a09418ddc45f0aa3d54f3e9305494bf2c831536/states_india.geojson"
+response = requests.get(url)
+if response.status_code == 200:
+    india_states = response.json()
+    # Now you can work with the 'india_states' GeoJSON data
+else:
+    print("Failed to retrieve GeoJSON file from GitHub")
 state_id_map = {}
 for feature in india_states["features"]:
     feature["id"] = feature["properties"]["state_code"]
