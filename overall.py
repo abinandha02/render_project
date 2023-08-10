@@ -6,6 +6,10 @@ from dash.dependencies import Input, Output
 import plotly.graph_objs as go
 import pandas as pd
 import requests
+import warnings
+
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
 
 #for yearly analysis
 df = pd.read_csv(r'https://raw.githubusercontent.com/abinandha02/render_project/main/crimes_against_women_2001-2014-checkpoint.csv', index_col=0)
