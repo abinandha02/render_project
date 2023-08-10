@@ -26,8 +26,7 @@ state_df['STATE/UT'].replace(
 state_df['STATE/UT'] = state_df['STATE/UT'].str.title()
 
 #for json and its id's
-
-url = "https://raw.githubusercontent.com/abinandha02/render_project/7a09418ddc45f0aa3d54f3e9305494bf2c831536/states_india.geojson"
+url="https://github.com/abinandha02/render_project/blob/main/data/states_india.geojson"
 response = requests.get(url)
 if response.status_code == 200:
     india_states = response.json()
