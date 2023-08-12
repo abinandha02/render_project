@@ -27,7 +27,6 @@ state_df['STATE/UT'] = state_df['STATE/UT'].str.title()
 
 #grouped state_wise
 grouped_df1 = state_df.groupby('STATE/UT', as_index=False).sum(numeric_only=True)
-state_id_map = {key: state_id_map[key] for key in sorted(state_id_map)}
 grouped_df1['Total Crimes'] = grouped_df1['Rape'] + grouped_df1['Kidnapping and Abduction'] + grouped_df1['Dowry Deaths'] + \
                            grouped_df1['Assault on women with intent to outrage her modesty'] + grouped_df1[
                                'Insult to modesty of Women'] + grouped_df1['Cruelty by Husband or his Relatives'] + \
