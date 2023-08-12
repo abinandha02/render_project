@@ -181,8 +181,8 @@ def update_pie(yaxis_name):
 
 #map decarator
 @app.callback(
-    dash.dependencies.Output('choropleth-map', 'figure'),
-    dash.dependencies.Input('state-crime-dropdown', 'value')
+    Output('choropleth-map', 'figure'),
+    [Input('state-crime-dropdown', 'value')]
 )
 def update_choropleth_map(selectedcrime):
     # Create choropleth map
