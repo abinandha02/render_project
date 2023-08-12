@@ -10,7 +10,6 @@ import warnings
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
-
 #for yearly analysis
 df = pd.read_csv(r'https://raw.githubusercontent.com/abinandha02/render_project/main/crimes_against_women_2001-2014-checkpoint.csv', index_col=0)
 year_df = df.groupby('Year').sum()
@@ -25,20 +24,6 @@ state_df['STATE/UT'].replace(
      'd&n haveli': 'd & n haveli', 'delhi ut': 'NCT of Delhi', 'delhi': 'NCT of Delhi'}, inplace=True, regex=True)
 state_df['STATE/UT'] = state_df['STATE/UT'].str.title()
 
-#for json and its id's
-url = "https://raw.githubusercontent.com/abinandha02/render_project/fa03a4c758e48508b5f1a68c137e32a4c13774a8/data/states_india.geojson"
-
-
-response = requests.get(url)
-if response.status_code == 200:
-    india_states = response.json()
-    # Now you can work with the 'india_states' GeoJSON data
-else:
-    print("Failed to retrieve GeoJSON file from GitHub")
-state_id_map = {}
-for feature in india_states["features"]:
-    feature["id"] = feature["properties"]["state_code"]
-    state_id_map[feature["properties"]["st_nm"]] = feature["id"]
 
 #grouped state_wise
 grouped_df1 = state_df.groupby('STATE/UT', as_index=False).sum(numeric_only=True)
@@ -48,13 +33,6 @@ grouped_df1['Total Crimes'] = grouped_df1['Rape'] + grouped_df1['Kidnapping and 
                                'Insult to modesty of Women'] + grouped_df1['Cruelty by Husband or his Relatives'] + \
                            grouped_df1['Importation of Girls']
 
-keys = []
-values = []
-for key, value in state_id_map.items():
-    keys.append(key)
-    values.append(value)
-grouped_df1['state'] = keys
-grouped_df1['id'] = values
 features_2=grouped_df1.columns[2:10]
 
 #creating dummy record for telangana
@@ -95,7 +73,7 @@ app.layout = html.Div(style={'backgroundColor': '#f2f2f2'},  # Set the backgroun
         html.H4('Select a crime category', style={'marginBottom': '20px', 'marginLeft': '20px'}),
         dcc.Dropdown(
             id='crime-dropdown',
-            options=[{'label': i.title(), 'value': i} for i in features_2],
+            options=[{'label': i.title(), 'value': i} for i in features_1],
             value='Rape',
             style={'width': '100%', 'marginBottom': '20px'}
         ),
@@ -114,22 +92,7 @@ app.layout = html.Div(style={'backgroundColor': '#f2f2f2'},  # Set the backgroun
     ], style={'width': '48%', 'display': 'inline-block', 'float': 'right'}),
 
     #for state
-        html.Div([
-            html.H3("CRIME AGAINST WOMEN STATE WISE", style={'textAlign': 'center', 'marginBottom': '20px', 'marginTop': '40px'}),
-            html.H4('Select a crime category', style={'marginBottom': '20px', 'marginLeft': '20px'}),
-    dcc.Dropdown(
-            id='state-crime-dropdown',
-            options=[{'label': i.title(), 'value': i} for i in features_2],
-            value='Total Crimes',
-            style={'width': '60%', 'marginBottom': '10px'}
-        ),
-    dcc.Graph(
-        id='choropleth-map',
-        config={'scrollZoom': False},
-        style={'height': '90vh'}
-    ),
-]),
-    html.Div([
+         html.Div([
     html.H3('CRIMES AGAINST WOMEN IN STATE AND YEAR', style={'textAlign': 'center','marginBottom': '20px'}),
     html.H4('Select a crime category',style={'marginBottom':'20px', 'marginLeft': '20px'}),# Center-aligned heading with margin at the bottom
     dcc.Dropdown(
@@ -179,28 +142,6 @@ def update_pie(yaxis_name):
         )]
     }
 
-#map decarator
-@app.callback(
-    Output('choropleth-map', 'figure'),
-    [Input('state-crime-dropdown', 'value')]
-)
-def update_choropleth_map(selectedcrime):
-    # Create choropleth map
-    choropleth_map = go.Figure(data=go.Choropleth(
-        locations=grouped_df1['id'],
-        z=grouped_df1[selectedcrime],
-        locationmode='geojson-id',
-        geojson=india_states,
-        colorscale='Viridis',
-        colorbar_title=selectedcrime,
-        hovertext=grouped_df1['state'],
-        hoverinfo='z+text'
-    ))
-
-    choropleth_map.update_geos(fitbounds="locations", visible=False)
-    choropleth_map.update_layout(title="Crime analysis over States")
-
-    return choropleth_map
 #heatmap decarator
 @app.callback(
     Output('heatmap-graphic', 'figure'),
