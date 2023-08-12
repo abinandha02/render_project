@@ -205,7 +205,7 @@ def update_choropleth_map(selectedcrime):
 @app.callback(
     Output('heatmap-graphic', 'figure'),
     [Input('yaxis', 'value')])
-def update_graph(yaxis_name):
+def update_choro(yaxis_name):
     return {
         'data': [go.Heatmap(
             x=new['STATE/UT'],
