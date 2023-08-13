@@ -199,7 +199,7 @@ def update_choro(yaxis_name):
 def update_violin_plot(selected_crime):
     violin_data = []
 
-    for crime in features_1:
+    for crime in features_3:
         violin_data.append(go.Violin(
             y=year_df[crime],
             box_visible=True,
