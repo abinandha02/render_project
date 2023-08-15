@@ -70,7 +70,7 @@ server = app.server
 # CSS borders
 plot_style = {'width': '100%', 'height': '60vh', 'border': '0px solid #d4d4d4', 'padding': '10px'}
 # LAYOUT
-app.layout = html.Div(style={'backgroundColor': '#f2f2f2'},  # Set the background color here
+app.layout = html.Div(style={'backgroundColor': '#f2f2f2'}, 
                       children=[
                           html.H3('CRIMES AGAINST WOMEN IN A SPECIFIC YEAR',
                                   style={'textAlign': 'center', 'marginBottom': '20px'}),
@@ -102,18 +102,18 @@ app.layout = html.Div(style={'backgroundColor': '#f2f2f2'},  # Set the backgroun
                               html.H3('CRIMES AGAINST WOMEN IN STATE AND YEAR',
                                       style={'textAlign': 'center', 'marginBottom': '20px'}),
                               html.H4('Select a crime category', style={'marginBottom': '20px', 'marginLeft': '20px'}),
-                              # Center-aligned heading with margin at the bottom
+                              
                               dcc.Dropdown(
                                   id='yaxis',
                                   options=[{'label': i.title(), 'value': i} for i in features_3],
                                   value='Rape',
                                   style={'width': '58%', 'marginLeft': '20px', 'marginBottom': '20px'}
-                                  # Adjust the width and add left margin with margin at the bottom
+                               
                               ),
                               dcc.Graph(id='heatmap-graphic',
                                         style={'width': '70%', 'height': '80vh', 'marginLeft': 'auto',
                                                'marginRight': 'auto', 'marginBottom': '30px'})
-                              # Center-align the plot using margins with margin at the bottom
+                             
                           ]),  # for violin plot
                           html.Div([
                               dcc.Graph(
@@ -181,7 +181,7 @@ def update_choro(yaxis_name):
             x=new['STATE/UT'],
             y=new['Year'],
             z=new[yaxis_name],
-            colorscale='Viridis'  # Change the colorscale to Viridis for better visibility
+            colorscale='Viridis'  
         )],
         'layout': go.Layout(
             title=f'Crimes Against Women: {yaxis_name} by State and Year',
